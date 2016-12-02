@@ -9,7 +9,19 @@
 	<body>
 	<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
 	    <h3>Warning: Experimental Code Area, things might break!</h3>
-	    
+		
+		<div style="width:80%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
+			<p class="bg-primary" align="center" th:text="${voteTitle}"></p>
+			<div class="progress" style="margin:10px;">
+			  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"  th:style="'width:'+ ${votesFor}+'%;'">
+			    Votes(<span th:text="${votesFor}" />) <span th:text="''+${votesForPercentage}+'%'" />
+			  </div>
+			  <div class="progress-bar progress-bar-striped active progress-bar-danger" role="progressbar"  th:style="'width:'+ ${votesAgainst}+'%;'">
+			    Votes(<span th:text="${votesAgainst}" />) <span th:text="''+${votesAgainstPercentage}+'%'" />
+			  </div>
+			</div>
+		</div>
+
 	    <script>
 	    /*
 	    	<p>Thymeleaf testing area: <span th:text="${test}"></span></p>	

@@ -57,7 +57,30 @@ public class VotingSystemController {
     public String testArea(@ModelAttribute VotingTopic votingTopicX, Model model) {
     	model.addAttribute("test", "Testing Attribute 55");
     	model.addAttribute("numberTest", 13);
-    	model.addAttribute("progressBarPercentage", 50);
+    	
+    	int votesForTest = 25;
+    	int votesAgainstTest = 75;
+    	int totalVotes = (votesForTest + votesAgainstTest); //Plus one is the control value, this makes sure that the divider is never zero.
+    	int votesForPercentage = (int) ( ((float)votesForTest / (float)totalVotes) * 100.0f );
+    	int votesAgainstPercentage = (int) ( ((float)votesAgainstTest / (float)totalVotes) * 100.0f );
+    	
+    	System.out.println("totalVotes: "+totalVotes);
+    	System.out.println("votesForTest: "+votesForTest);
+    	System.out.println("votesAgainstTest: "+votesAgainstTest);
+    	
+    	System.out.println("votesForPercentage: "+votesForPercentage);
+    	System.out.println("votesAgainstPercentage: "+votesAgainstPercentage);
+    	
+    	model.addAttribute("votesForPercentage",  votesForPercentage);
+    	model.addAttribute("votesAgainstPercentage",  votesAgainstPercentage);
+
+    	//Test vote
+    	if ( mVotingTopics != null && mVotingTopics.size() > 0 )
+    		model.addAttribute("voteTitle", mVotingTopics.get(0).getTitle());
+    	else
+    		model.addAttribute("voteTitle", "Dummy title, votingtopics not initialized..");
+    	model.addAttribute("votesFor", 25);
+    	model.addAttribute("votesAgainst", 75);
     	
 		VotingTopic testVotingTopic = new VotingTopic("Test voting topic, do you prefer option 1 or 2?", "Yes", "No", 2, 6);
 		
@@ -73,7 +96,7 @@ public class VotingSystemController {
     @RequestMapping("/")
     public String mainMenu(Model model) {  	
     	
-    	//NOTE: Here we initialize the votes.
+    	//NOTE: Here we initialize the voting topics in case they haven't been initialized yet.
     	if ( mVotingTopics == null )
     	{
     		this.initTopics();
@@ -88,8 +111,9 @@ public class VotingSystemController {
     
     @RequestMapping("/login")
     public String logInNow(Model model) {
-    	//model.addAttribute("test", "Voting System 1.0");
-    	
+
+    	//This resets the state of the votes of that user, so he can vote again,
+    	//this is so for testing the application.
     	userChangedResetUserVotingSettings();
     	
         return "login";
@@ -111,59 +135,55 @@ public class VotingSystemController {
     	{
     		//System.out.println("x: "+x);
     		//votingTopics.toString();
-    	} 	
+    	}
+    	
+    	if ( usersVoteResult== null )
+    		return "allvotesdone";
+    		
     	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
-    	if ( usersVoteResult.getChoiceMade().equals("0") || usersVoteResult.getChoiceMade().equals("1") )
+
+    	/************************************************************
+    	 * 
+    	 * Handle the users choice, 0 is yes, 1 is no, usually, 
+    	 * but voting topics can have custom choice names.
+    	 * 
+    	 ************************************************************/
+    	//Handle users choice 
+    	boolean successfulVote = false; 
+
+		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
+		if ( mCurrentVotingIndex >= mVotingTopics.size() )
+		{
+			return "allvotesdone";
+		}
+
+    	if ( usersVoteResult.getChoiceMade().equals("0") )
     	{
-    		System.out.println("Yeehaw!");
+    		successfulVote = true;
+    		mVotingTopics.get(mCurrentVotingIndex).setVotesFor(mVotingTopics.get(mCurrentVotingIndex).getVotesFor() + 1);
+    	} else if ( usersVoteResult.getChoiceMade().equals("1") )
+    	{
+    		successfulVote = true;
+    		mVotingTopics.get(mCurrentVotingIndex).setVotesAgainst(mVotingTopics.get(mCurrentVotingIndex).getVotesAgainst() + 1);
+    	}
+    	
+    	if ( successfulVote )
+    	{
+    		//Go to the next vote
     		mCurrentVotingIndex++;
+    		
+    		//Did we reach the end of voting?
     		if ( mCurrentVotingIndex >= mVotingTopics.size() )
     		{
-    			System.out.println("Yeehaw! 2");
     			return "allvotesdone";
-    		} else 
-    		{
-    			System.out.println("NOOO! 2 votingindex:" + mCurrentVotingIndex);
-    			return "voteresults";
-    		}
-    		
-    	} else {
-    		System.out.println("NOOO! 3");
-    	}
+    		} 
 
-    	return "voteresults";
-    }
-    
-    
-    //NOTE: This was the first working system, left here for legacy reasons.
-    @RequestMapping(value = "/submitvotes", method = RequestMethod.POST)
-    public String submitVotes(@ModelAttribute VotingTopic usersVoteResult, Model model)
-    {
-    	System.out.println("Vote result of user: " + usersVoteResult.toString());
+    	}
     	
-    	//TODO: Multiple votes on one page.
-    	//for ( int x = 0; x < votingTopics.size(); x++ )
-    	{
-    		//System.out.println("x: "+x);
-    		//votingTopics.toString();
-    	} 	
-    	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
-    	if ( usersVoteResult.getChoiceMade() == "0" || usersVoteResult.getChoiceMade() == "1" )
-    	{
-    		mCurrentVotingIndex++;
-    		if ( mCurrentVotingIndex > mVotingTopics.size() )
-    		{
-    			return "voteresults";
-    		} else 
-    		{
-    			return "votingsystem";
-    		}
-    		
-    	}
-
+    	//End of voting was not reached, go vote again.
     	return "voteresults";
     }
-    
+       
     @RequestMapping(value = "allvotesdone")
     public String allVotesDone(Model model){
         return "allvotesdone";
@@ -218,6 +238,12 @@ public class VotingSystemController {
     	{
     		this.initTopics();
     	}
+    	
+		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
+		if ( mCurrentVotingIndex >= mVotingTopics.size() )
+		{
+			return "allvotesdone";
+		}
     	
     	if ( mCurrentVotingIndex < mVotingTopics.size() )
     		model.addAttribute("votingTopicX", mVotingTopics.get(mCurrentVotingIndex));
