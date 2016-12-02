@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Voting System Welcome Page</title>	
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
+    </head>
+    <body>    
+   		<div id="content" style="margin: 30px;">
+	        <h1>Welcome to the Voting System 1.0</h1>
+	        
+	         
+	        <table th:style="'width:{model.widthOfUserScreen}'">
+	        <tr>
+	        <td valign="top">
+	        	<p>Users active:</p>
+	        </td>
+	        </tr>
+	        </table>        
+	        
+	        <div id="navbar">
+		        <table style="width:80%; background-color: grey; padding-left:10px; margin:20px; border: 2px solid black;">
+		        <tr>
+		        <td>
+		        <a th:href="@{/login}"><input type="button" value="Log in with existing account" class="btn btn-primary"/></a>
+		        <a th:href="@{/register}"><input type="button" value="Register a new account" class="btn btn-success"/></a>
+		        <a th:href="@{/testarea}"><input type="button" value="Run a test" class="btn btn-warning"/></a>
+		        </td>
+		        </tr>
+		        </table>
+		    </div>
+        </div>              
+    </body>
+</html>

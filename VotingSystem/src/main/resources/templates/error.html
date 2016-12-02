@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Voting System Welcome Page</title>	
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
+    </head>
+    <body>
+        <h3>There was an error, please try these: </h3>
+        <a th:href="@{/login}"><input type="button" value="Log in" class="btn btn-success"/></a>
+        <br/>
+        <a th:href="@{/register}"><input type="button" value="Register a new account" class="btn btn-success"/></a>
+        <br/>
+        <a th:href="@{/testarea}"><input type="button" value="Enter test area" class="btn btn-warning"/></a>
+        
+    </body>
+</html>
