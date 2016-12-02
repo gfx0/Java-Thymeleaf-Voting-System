@@ -21,20 +21,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-        .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
+        .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css even if the user is logged out, we want to look cool :)
         .and()
         .authorizeRequests().antMatchers("/register", "/test", "/adduser", "/").permitAll()
         .and()
     	.authorizeRequests().antMatchers("/testarea").permitAll() // Enable testing area for developing this program
     	.and()
+    	.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN") //This is for the admin area to create new votes
+    	.and()
         .authorizeRequests().anyRequest().authenticated()
         .and()
       .formLogin()
           .loginPage("/login")
-          .defaultSuccessUrl("/votingsystem")
+          .failureUrl("/loginerror")
+          .defaultSuccessUrl("/votingsystem")          
           .permitAll()
           .and()
       .logout()
+      	  .logoutUrl("/logout")
+      	  .logoutSuccessUrl("/login")
           .permitAll();
     }
     
@@ -42,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     	auth.inMemoryAuthentication()
         .withUser("user").password("password").roles("USER").and()
-        .withUser("admin").password("password").roles("USER", "ADMIN");
+        .withUser("admin").password("password").roles("ADMIN");
     	
         auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
     }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Voting System Welcome Page</title>	
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
+    </head>
+    <body>    
+    
+      	
+   		<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
+	        <h1>Voting System 1.0: All votes done!</h1>
+	        
+	        <br/>
+   		    <h3>Congratulations! You have voted on all questions! Here are the results:</h3>
+   		    
+   		    <p>TODO: List results!</p>
+   		    
+   		<div class="panel-group">
+  			<div style="padding: 20px;" align="center" class="panel panel-primary">
+	  			    
+				<div style="width:80%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
+					<p class="bg-primary" align="center">TODO: Result here</p>
+					<div class="progress" style="margin:10px;">
+					  <!--<div th:width="{result=${numberTest}}" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">-->
+					  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">
+					    Option 1!
+					  </div>
+					  <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" style="width:80%;">
+					    Option 2!
+					  </div>
+					</div>
+				</div>
+				
+				<br/>
+				
+				<div style="width:80%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
+					<p class="bg-primary" align="center">TODO: Result here</p>
+					<div class="progress" style="margin:10px;">
+					  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:60%;">
+					    Option 1!
+					  </div>
+					  <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" style="width:40%;">
+					    Option 2!
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+   		    <div th:switch="${usersVotingTopicAndResult.choiceMade}"> 
+			  <p th:case="'0'">You voted yes!</p>
+			  <p th:case="'1'">You voted no!</p>
+			  <p th:case="*">Your voting result was unclear.. Sorry.</p> 
+			</div>
+			
+			
+   		    
+	        <div id="navbar">
+		        <table style="width:80%; padding-left:10px; margin:20px;">
+		        <tr>
+		        <td>
+		        <a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
+		        <a th:href="@{/resetmyvotes}"><input type="button" value="Reset your votes" class="btn btn-warning"/></a>
+		        <div sec:authorize="hasRole('ROLE_ADMIN')">
+		        	<p>Admin tool:
+		      			<a th:href="@{/testarea}"><input type="button" value="Run a test" class="btn btn-danger"/></a>
+		      		</p>
+		      	</div>
+		        </td>
+		        </tr>
+		        </table>
+		    </div>		  
+        </div>    
+
+	              
+    </body>
+</html>

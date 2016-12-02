@@ -7,29 +7,57 @@
 		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
     </head>
     <body>    
-   		<div id="content" style="margin: 30px;">
+   		<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
 	        <h1>Welcome to the Voting System 1.0</h1>
 	        
 	         
 	        <table th:style="'width:{model.widthOfUserScreen}'">
 	        <tr>
 	        <td valign="top">
-	        	<p>Users active:</p>
-	        </td>
+	        	<p>Topics available to vote on:</p>
+	        </td>	        
 	        </tr>
-	        </table>        
+	        <tr>
+	        </tr>
+	        </table>  
+	       
+	            <ul class="list-group" th:each="votingTopic, iter : ${votingTopicsAvailable}">
+	        		<li th:unless="${iter.index > 3}" class="list-group-item list-group-item-action list-group-item-info" th:text="${votingTopic.title}"/>
+	        	</ul>	 
+	        	<ul class="list-group">
+	        		<li class="list-group-item list-group-item-action list-group-item-info" th:text="..."/>
+	        	</ul>	 
+	       
+	        
 	        
 	        <div id="navbar">
-		        <table style="width:80%; background-color: grey; padding-left:10px; margin:20px; border: 2px solid black;">
+		        <table style="width:80%; padding-left:10px; margin:20px;">
 		        <tr>
 		        <td>
-		        <a th:href="@{/login}"><input type="button" value="Log in with existing account" class="btn btn-primary"/></a>
-		        <a th:href="@{/register}"><input type="button" value="Register a new account" class="btn btn-success"/></a>
-		        <a th:href="@{/testarea}"><input type="button" value="Run a test" class="btn btn-warning"/></a>
+		        <!--sec:authorize="!hasRole('ROLE_ADMIN')&&!hasRole('ROLE_USER')">-->
+		        <div th:if="${#authorization.expression('!hasRole(''ROLE_ADMIN'')') and #authorization.expression('!hasRole(''ROLE_USER'')') }">
+		        	<a th:href="@{/login}"><input type="button" value="Log in with existing account" class="btn btn-primary"/></a>
+		        	<a th:href="@{/register}"><input type="button" value="Register a new account" class="btn btn-success"/></a>
+		        </div>
+		        <div sec:authorize="isAuthenticated()">
+		        	<a th:href="@{/votingsystem}"><input type="button" value="Goto voting" class="btn btn-success"/></a>
+		        	<br/>
+		        	<br/>
+		        	<form th:action="@{/logout}" method="post">
+		        		<button type="submit" value="Log out" class="btn btn-danger">Log out from your account</button>
+		        	</form>
+		        	
+		        </div>
+		        <div sec:authorize="hasRole('ROLE_ADMIN')">
+		        <br/>
+		        <p>Admin Tools:</p>
+		   		<a th:href="@{/testarea}"><input type="button" value="Goto experiment area" class="btn btn-danger"/></a>
+		        </div>
 		        </td>
 		        </tr>
 		        </table>
 		    </div>
-        </div>              
+        </div>
+        <p style="margin-left: 30px;"><i>By Jani M&auml;kinen @ Haaga-Helia (Server Programming course SWD4TF021-1 2016)</i></p>          
     </body>
 </html>

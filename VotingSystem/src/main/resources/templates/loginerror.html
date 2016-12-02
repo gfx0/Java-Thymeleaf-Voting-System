@@ -7,32 +7,25 @@
 		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
     </head>
     <body>    
-	<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
-	        <h1>Voting System 1.0</h1>
+   		<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
+	        <h1>Login error</h1>
+	     
+	     	<h3>Tip: user: admin password: password</h3>
+	     	<h3>Tip2: user: user password: password</h3>
 	        
-	        <br/>
-   		    <h3>Thank you for voting! Please vote more!</h3>
-   		    
-   		    <div th:switch="${usersVotingTopicAndResult.choiceMade}"> 
-			  <p th:case="'0'">You voted yes!</p>
-			  <p th:case="'1'">You voted no!</p>
-			  <p th:case="*">Your voting result was unclear.. Sorry.</p> 
-			</div>
-			
-			<a th:href="@{/votingsystem}"><button class="btn btn-success">Do the next vote!</button></a>
-   		    
+	        
 	        <div id="navbar">
 		        <table style="width:80%; padding-left:10px; margin:20px;">
 		        <tr>
 		        <td>
-		        <a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
+		        <a th:href="@{/login}"><input type="button" value="Log in with existing account" class="btn btn-primary"/></a>
+		        <a th:href="@{/register}"><input type="button" value="Register a new account" class="btn btn-success"/></a>
 		        <a th:href="@{/testarea}"><input type="button" value="Run a test" class="btn btn-warning"/></a>
 		        </td>
 		        </tr>
 		        </table>
-		    </div>		  
-        </div>    
-
-	              
+		    </div>
+        </div>
+        <p style="margin-left: 30px;"><i>By Jani M&auml;kinen @ Haaga-Helia (Server Programming course SWD4TF021-1 2016)</i></p>          
     </body>
 </html>

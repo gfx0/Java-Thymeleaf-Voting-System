@@ -6,55 +6,56 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
     </head>
-    <body>
-    
-    <script>
-    /*
-    	<p>Thymeleaf testing area: <span th:text="${test}"></span></p>	
-	<div style="width:80%; margin: 30px;">
-	
-		<div style="width:50%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
-			<p class="bg-primary" align="center">Do you prefer Cats or Dogs?</p>
-			<div class="progress" style="margin:10px;">
-			  <!--<div th:width="{result=${numberTest}}" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">-->
-			  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">
-			    Option 1!
-			  </div>
-			  <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" style="width:80%;">
-			    Option 2!
-			  </div>
+	<body>
+	<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
+	    <h3>Warning: Experimental Code Area, things might break!</h3>
+	    
+	    <script>
+	    /*
+	    	<p>Thymeleaf testing area: <span th:text="${test}"></span></p>	
+		<div style="width:80%; margin: 30px;">
+		
+			<div style="width:50%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
+				<p class="bg-primary" align="center">Do you prefer Cats or Dogs?</p>
+				<div class="progress" style="margin:10px;">
+				  <!--<div th:width="{result=${numberTest}}" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">-->
+				  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:20%;">
+				    Option 1!
+				  </div>
+				  <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" style="width:80%;">
+				    Option 2!
+				  </div>
+				</div>
+			</div>
+			
+			<!-- How to display a String of text using Thymeleaf -->		
+			<p th:text='${test}'></p>
+			
+			<!-- How to display a number using Thymeleaf -->		
+			<p th:text='${numberTest}'></p>
+			<div th:object="${testTopic}">
+				<p>${testTopic.title}</p>
+			</div>		
+			
+			<p> HERE IS ${testTopic.title} as TH:TEXT</p>
+			<p th:text='${testTopic.title}'></p>
+			
+			<p> HERE IS ${testTopic.votesFor} as TH:TEXT</p>
+			<p th:text='${testTopic.votesFor}'></p>
+			
+			<p>$ [[${progressBarPercentage}]]</p>
+		
+			<p th:text="${testTopic.title}">Test topic title: </p>
+			<br/>
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:30%">
+			    <p th:text="${progressBarPercentage}"></p>
+			  	</div>
 			</div>
 		</div>
 		
-		<!-- How to display a String of text using Thymeleaf -->		
-		<p th:text='${test}'></p>
+		</script>
 		
-		<!-- How to display a number using Thymeleaf -->		
-		<p th:text='${numberTest}'></p>
-		<div th:object="${testTopic}">
-			<p>${testTopic.title}</p>
-		</div>		
-		
-		<p> HERE IS ${testTopic.title} as TH:TEXT</p>
-		<p th:text='${testTopic.title}'></p>
-		
-		<p> HERE IS ${testTopic.votesFor} as TH:TEXT</p>
-		<p th:text='${testTopic.votesFor}'></p>
-		
-		<p>$ [[${progressBarPercentage}]]</p>
-	
-		<p th:text="${testTopic.title}">Test topic title: </p>
-		<br/>
-		<div class="progress">
-			<div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:30%">
-		    <p th:text="${progressBarPercentage}"></p>
-		  	</div>
-		</div>
-	</div>
-	
-	</script>
-	
-	<div align="left" class="col-md-5">
 		<form action="#" th:action="@{/submitvotes}" method="post">
 			<h1>Choose One Option To Vote</h1>
 			<p th:text="${votingTopicX.title}"></p>
@@ -64,34 +65,32 @@
 	         	<input type="radio" th:name="${votingTopicX.title}" th:text="${votingTopicX.choice2}" th:field="${votingTopicX.choiceMade}" value="1"></input>
 	         	</div>		                             
 			<br/>
-			<button type="submit" value="Save Data Button" class="btn btn-info">Save My Votes</button> 
+			<button type="submit" value="Do Experimental Vote" class="btn btn-info">Run Experiment</button> 
 		</form>
-	</div>
-	
-	<!--
-	<div align="left" class="col-md-5">
-		<form action="#" th:action="@{/submitvotes}" th:object="${votingTopics}" method="post">
-			<h1>Choose One Option To Vote</h1>
-			<div th:each="votingTopic, iter: ${votingTopics}">
-				<p th:text="${votingTopic.title}"></p>
-				<div align="left">
-	         	<input type="radio" th:name="votedChoice+${iter.index}" value="0" th:text="${votingTopic.choice1}"></input>
-	         	&nbsp;&nbsp;
-	         	<input type="radio" th:name="votedChoice+${iter.index}" value="1" th:text="${votingTopic.choice2}"></input>
-	         	</div>		                             
-			</div>
-			<br/>
-			<button type="submit" value="Save Data Button" class="btn btn-info">Save My Votes</button> 
-		</form>
-	</div>
-	
-	-->
-			
-	
-    	<div>
-	    	<a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
-	    </div>
-	
+		
+		<!--
+		<div align="left" class="col-md-5">
+			<form action="#" th:action="@{/submitvotes}" th:object="${votingTopics}" method="post">
+				<h1>Choose One Option To Vote</h1>
+				<div th:each="votingTopic, iter: ${votingTopics}">
+					<p th:text="${votingTopic.title}"></p>
+					<div align="left">
+		         	<input type="radio" th:name="votedChoice+${iter.index}" value="0" th:text="${votingTopic.choice1}"></input>
+		         	&nbsp;&nbsp;
+		         	<input type="radio" th:name="votedChoice+${iter.index}" value="1" th:text="${votingTopic.choice2}"></input>
+		         	</div>		                             
+				</div>
+				<br/>
+				<button type="submit" value="Save Data Button" class="btn btn-info">Save My Votes</button> 
+			</form>
+		</div>
+		
+		-->
+				
+		
+	   	<a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
+
+		</div>
 	
     </body>
 </html>

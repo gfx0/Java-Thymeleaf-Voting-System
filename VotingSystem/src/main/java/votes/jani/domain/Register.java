@@ -7,18 +7,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class Register {
 
 	@NotEmpty
-	@Size(min = 5, max = 30)
+	@Size(min = 3, max = 30)
 	private String username = "";
 
 	@NotEmpty
-	@Size(min = 5, max = 30)
+	@Size(min = 3, max = 30)
 	private String password = "";
 
-	@Size(min = 7, max = 30)
+	@Size(min = 6, max = 30)
 	private String email = "";
 
 	@NotEmpty
-	@Size(min = 5, max = 30)
+	@Size(min = 3, max = 30)
 	private String passwordConfirmation = "";
 
 	@NotEmpty

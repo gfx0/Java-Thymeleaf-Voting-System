@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,34 @@ public class VotingSystemController {
 	@Autowired
     private UserRepository repository; 
 	
-	private VotingTopic mVotingTopicX;
-	  
+	private VotingTopic mVotingTopicX = null;
+	
+	private ArrayList<VotingTopic> mVotingTopics; //TODO: All voting topics here.
+	
+	private int mCurrentVotingIndex = 0;
+	
+	private void userChangedResetUserVotingSettings()
+	{
+		mCurrentVotingIndex = 0; //Start the newly logged users votes from the first voting topic again.
+	}
+
+	private void initTopics()
+	{
+		mCurrentVotingIndex = 0;
+		System.out.println("Initialized mVotingTopics with the default topics!");
+		mVotingTopics = new ArrayList<VotingTopic>();
+		VotingTopic topic1 = new VotingTopic("Do you prefer Cats or Dogs?", "Cats", "Dogs", 2, 6);	
+		VotingTopic topic2 = new VotingTopic("Do you like Apples or Oranges?", "Apples", "Oranges", 4, 6);
+		VotingTopic topic3 = new VotingTopic("Do you like the Moon or the Sun?", "Moon", "Sun", 3, 3);
+		VotingTopic topic4 = new VotingTopic("Is Chocolate Good?", "Yes", "No", 3, 3);
+		VotingTopic topic5 = new VotingTopic("Would you like to visit Australia?", "Yes", "No", 3, 3);
+		mVotingTopics.add(topic1);
+		mVotingTopics.add(topic2);
+		mVotingTopics.add(topic3);
+		mVotingTopics.add(topic4);
+		mVotingTopics.add(topic5);
+	}
+	
     @RequestMapping("/testarea")
     public String testArea(@ModelAttribute VotingTopic votingTopicX, Model model) {
     	model.addAttribute("test", "Testing Attribute 55");
@@ -35,16 +62,6 @@ public class VotingSystemController {
 		VotingTopic testVotingTopic = new VotingTopic("Test voting topic, do you prefer option 1 or 2?", "Yes", "No", 2, 6);
 		
 		model.addAttribute("testTopic", testVotingTopic);
-		
-		ArrayList<VotingTopic> votingTopics = new ArrayList<VotingTopic>();
-		VotingTopic topic1 = new VotingTopic("Do you prefer 1: Cats or 2: Dogs?", "Cats", "Dogs", 2, 6);	
-		votingTopics.add(topic1);
-		VotingTopic topic2 = new VotingTopic("Do you like Apples or Oranges?", "Apples", "Oranges", 4, 6);
-		votingTopics.add(topic2);
-		VotingTopic topic3 = new VotingTopic("Do you like the Moon or the Sun?", "Moon", "Sun", 3, 3);
-		votingTopics.add(topic3);
-		
-		model.addAttribute("votingTopics",votingTopics);
 
 		mVotingTopicX = new VotingTopic("Is Chocolate Good?", "Yes", "No", 2, 6);	
 
@@ -54,14 +71,27 @@ public class VotingSystemController {
     }
     
     @RequestMapping("/")
-    public String mainMenu(Model model) {
-    	model.addAttribute("test", "Voting System 1.0");	
+    public String mainMenu(Model model) {  	
+    	
+    	//NOTE: Here we initialize the votes.
+    	if ( mVotingTopics == null )
+    	{
+    		this.initTopics();
+    	} else {
+    		System.out.println("Avoided re-initialization of mVotingTopics with default topics since mVotingTopics is already initialized.");
+    	}
+	
+    	model.addAttribute("votingTopicsAvailable", mVotingTopics);
+    	
         return "index";
     }
     
     @RequestMapping("/login")
     public String logInNow(Model model) {
-    	//model.addAttribute("test", "Voting System 1.0");	
+    	//model.addAttribute("test", "Voting System 1.0");
+    	
+    	userChangedResetUserVotingSettings();
+    	
         return "login";
     }
     
@@ -69,43 +99,75 @@ public class VotingSystemController {
     public String addStudent(Model model){
     	model.addAttribute("register", new Register());
         return "register";
-    }	
+    }
     
-    @RequestMapping(value = "/submitvotes", method = RequestMethod.POST)
-    public String submitVotes(@ModelAttribute VotingTopic votingTopic)
+    @RequestMapping(value = "/submitvote", method = RequestMethod.POST)
+    public String submitVote(@ModelAttribute VotingTopic usersVoteResult, Model model)
     {
-    	System.out.println("Test XXX Monkeys");
-    	//System.out.println("v s"+votingTopics.size());
-    	System.out.println("v" + votingTopic.toString());
+    	System.out.println("Vote result of user: " + usersVoteResult.toString());
     	
-    	int x = 0;
-    	//for ( x = 0; x < votingTopics.size(); x++ )
+    	//TODO: Multiple votes on one page.
+    	//for ( int x = 0; x < votingTopics.size(); x++ )
     	{
     		//System.out.println("x: "+x);
     		//votingTopics.toString();
     	} 	
+    	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
+    	if ( usersVoteResult.getChoiceMade().equals("0") || usersVoteResult.getChoiceMade().equals("1") )
+    	{
+    		System.out.println("Yeehaw!");
+    		mCurrentVotingIndex++;
+    		if ( mCurrentVotingIndex > mVotingTopics.size() )
+    		{
+    			System.out.println("Yeehaw! 2");
+    			return "allvotesdone";
+    		} else 
+    		{
+    			System.out.println("NOOO! 2 votingindex:" + mCurrentVotingIndex);
+    			return "voteresults";
+    		}
+    		
+    	} else {
+    		System.out.println("NOOO! 3");
+    	}
+
     	return "voteresults";
     }
     
-    /*
-    @RequestMapping(value = "/processvotes", method = RequestMethod.POST)
-    public String save(@ModelAttribute(value = "votingTopics") ArrayList<VotingTopic> votingTopics)
+    
+    //NOTE: This was the first working system, left here for legacy reasons.
+    @RequestMapping(value = "/submitvotes", method = RequestMethod.POST)
+    public String submitVotes(@ModelAttribute VotingTopic usersVoteResult, Model model)
     {
-    	System.out.println("Test XXX Monkeys");
-    	int x = 0;
-    	for ( x = 0; x < votingTopics.size(); x++ )
+    	System.out.println("Vote result of user: " + usersVoteResult.toString());
+    	
+    	//TODO: Multiple votes on one page.
+    	//for ( int x = 0; x < votingTopics.size(); x++ )
     	{
-    		System.out.println("x: "+x);
+    		//System.out.println("x: "+x);
     		//votingTopics.toString();
-    	} 		
+    	} 	
+    	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
+    	if ( usersVoteResult.getChoiceMade() == "0" || usersVoteResult.getChoiceMade() == "1" )
+    	{
+    		mCurrentVotingIndex++;
+    		if ( mCurrentVotingIndex > mVotingTopics.size() )
+    		{
+    			return "voteresults";
+    		} else 
+    		{
+    			return "votingsystem";
+    		}
     		
-    		
-        //for (String s : priorities.keySet()) {
-            //System.out.println(s);
-        //}
+    	}
+
     	return "voteresults";
     }
-    */
+    
+    @RequestMapping(value = "allvotesdone")
+    public String allVotesDone(Model model){
+        return "allvotesdone";
+    }
     
     @RequestMapping(value = "adduser", method = RequestMethod.POST)
     public String save(@Valid @ModelAttribute("register") Register registerForm, BindingResult bindingResult) {
@@ -143,29 +205,72 @@ public class VotingSystemController {
     @RequestMapping("/votingsystem")
     public String votingSystem(@ModelAttribute VotingTopic votingTopic, Model model)
     {
-		ArrayList<VotingTopic> votingTopics = new ArrayList<VotingTopic>();
-		VotingTopic topic1 = new VotingTopic("Do you prefer 1: Cats or 2: Dogs?", "Cats", "Dogs", 2, 6);	
-		votingTopics.add(topic1);
-		VotingTopic topic2 = new VotingTopic("Do you like Apples or Oranges?", "Apples", "Oranges", 4, 6);
-		votingTopics.add(topic2);
-		VotingTopic topic3 = new VotingTopic("Do you like the Moon or the Sun?", "Moon", "Sun", 3, 3);
-		votingTopics.add(topic3);
-		
-		model.addAttribute("votingTopics",votingTopics);
-		
-		List<String> data = new ArrayList<String>();
-        data.add("1");
-        data.add("2");
-        data.add("3");
-        data.add("4");
-        data.add("5");
-        data.add("6");
-        data.add("7");
-        data.add("8");
-
-        model.addAttribute("datas", data);
-        
+    	/*
+		if ( mCurrentVotingIndex > mVotingTopics.size() )
+		{
+			return "voteresults";
+		} else 
+		{
+			model.addAttribute("votingTopicX", mVotingTopics.get(mCurrentVotingIndex));
+		}
+		*/
+    	if ( mVotingTopics == null )
+    	{
+    		this.initTopics();
+    	}
+    	
+    	if ( mCurrentVotingIndex < mVotingTopics.size() )
+    		model.addAttribute("votingTopicX", mVotingTopics.get(mCurrentVotingIndex));
+    	else
+    	{
+    		if ( mVotingTopics.size() > 0 )
+    			model.addAttribute("votingTopicX", mVotingTopics.get(0));
+    		else
+    		{    			
+    			return "index";
+    		}
+    	}
         return "votingsystem";
     }
   
+    @RequestMapping("/resetmyvotes")
+    public String votingSystem(Model model)
+    {
+    	mCurrentVotingIndex = 0;
+    	return "index";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/admin/deletethisquestion")
+    public String adminDeleteThisQuestion(Model model)
+    {
+    	System.out.println("Removing question from the voting topics: " + mVotingTopics.get(mCurrentVotingIndex).getTitle());
+    	if ( mCurrentVotingIndex < mVotingTopics.size() )
+    		mVotingTopics.remove(mCurrentVotingIndex);
+    	mCurrentVotingIndex = 0;    	
+    	return "redirect:/votingsystem";
+    }
+    
+    @RequestMapping("/loginerror")
+    public String loginFailed(Model model)
+    {
+    	//Yeah, user failed to input good credentials, maybe do something special like login timeouts etc.
+    	return "loginerror";
+    }
+    @RequestMapping("/logout")
+    public String logout(Model model)
+    {
+
+    	return "login";
+    }
+    /*
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){    
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+    }
+    */
 }

@@ -1,158 +1,36 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xlmns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <head>
         <title>Voting System Welcome Page</title>	
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
     </head>
     <body>    
-   		<div id="content" style="margin: 30px;">
-	        <h1>Voting System 1.0</h1>
-	        
-	        <br/>
-	        <h3>Choice:</h3>
-	        
-	        <p th:text="${votingTopic.title}"></p>
-	        <!--
-	        <div th:each="data, row: ${datas}" th:with="numList=${#strings.listSplit('3,2,1,0', ',')}" th:if="${row.current} % 4 == 0" class="span3">
-    			<span th:each="num : ${numList}" th:with="dataIndex=(${row.index} - ${num})" th:text="${datas[dataIndex]}">data</span>
-			</div>
-			-->
-				
-				<!--
-				<tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd}? 'odd'">
-   					<td th:text="${prod.name}">Onions</td>
-   				</tr>
-   				-->
-			
-			<!-- <div class="radio">
-				<label><input type="radio" name="optradio">Option 1</label>
-			</div>
-			-->
-			<!-- <input type="hidden" th:field="*{categoryId}" /> -->
-			
-			<!--
-			<div align="center">			
-			<form th:each="votingTopic : ${votingTopics}" th:action="@{/submitvotes}" th:object="${votingTopics}" method="post">
-				-->
-				
-	        	<!--<label class="radio-inline"><input type="radio" name="optradio1">Vote Yes</label></input>
-				<label class="radio-inline"><input type="radio" name="optradio2">Vote No</label></input>-->
-
-				<!--
-				<p th:text="${votingTopic.title}">Onions</p>
-					<input type="radio" name="optradio2">Vote 1 &nbsp;</input><input type="radio" name="optradio2">Vote 2</input>
-				<br/>
-				<br/>
-				
-				
-   			</form>
-   			<button type="submit" value="Save Data Button" class="btn btn-info">Save My Votes</button> 
-   			
-   			</div>-->
-   			
-   			<!--
-   			<div th:each="gender : ${genders}" class="radio">
-                <input type="radio" th:value="${gender}" th:field="*{gender}" />
-                <label th:for="${#ids.prev('gender')}" th:text="${gender.description}">Male</label>
-            </div>
-            -->
-            
-			<form action="#" th:action="@{/submitvotes}" th:object="${votingTopics}" method="post">
-
-	            <div th:each="votingTopic : ${votingTopics}" class="radio">
-	                <input type="radio" th:name="x" th:value="test1" /><p th:text="${votingTopic.getTitle()}"> aa</p>
-	                <input type="radio" th:name="y" th:value="test2" /><p th:text="${votingTopic.getTitle()}+'xxx'"> xx</p>
-	                <!--<label th:for="${#ids.prev('gender')}" th:text="${votingTopic.description}">Male</label>-->
-	            </div>
-	            <!--
-		      	<table class="table table-bordered table-hover table-striped">
-					<tr th:each="votingTopic, status : ${votingTopics}">
-						<td>
-							<p th:text="${votingTopic.title}">Onions</p>
-							<input type="radio" th:name="|votingTopic${index}|">Vote 1 &nbsp;</input>
-							<input type="radio" th:name="|votingTopic${index}|">Vote 2</input>
-							
-						</td>
-					</tr>
-				</table>
-				-->
-			
-				<button type="submit" value="Save Data Button" class="btn btn-info">Save My Votes</button> 
-			
+		<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
+	        <h1>Voting System 1.0 Vote:</h1>
+	     
+			<form action="#" th:action="@{/submitvote}" method="post">
+					<h2>Choose One Option To Vote</h2>
+					<p th:text="${votingTopicX.title}"></p>
+						<div align="left">
+			         	<input type="radio" th:name="${votingTopicX.title}" th:text="${votingTopicX.choice1}" th:field="${votingTopicX.choiceMade}" value="0"></input>
+			         	&nbsp;&nbsp;
+			         	<input type="radio" th:name="${votingTopicX.title}" th:text="${votingTopicX.choice2}" th:field="${votingTopicX.choiceMade}" value="1"></input>
+			         	</div>		                             
+					<br/>
+					<button type="submit" value="Save Data Button" class="btn btn-info">Save My Vote</button> 
 			</form>
-			<!--
-					<td><input type="radio" th:name="|clientList[${stat.index}].clientID|"
-		                  th:value="${currentClient.getClientID()}" th:checked="${currentClient.selected}" /></td>
-		               <td th:text="${currentClient.getClientID()}"></td>
-		               <td th:text="${currentClient.getIpAddress()}"></td>
-		               <td th:text="${currentClient.getDescription()}"></td>
-		            </tr>
-		         </tbody>
-		      </table>
-		     -->
-			
-			<!--<td th:text="${votingTopic.title}">Onions</td>-->
-			
-			<!-- working one
-			<table>
-   				<tr th:each="votingTopic : ${votingTopics}">
-   					<td th:text="${votingTopic.title}">Topic of the vote</td>
-    			</tr>
-   			</table>
-   			-->
-   			   	
-			<!--
-			<ul style="list-style-type: none" th:each="votingTopic : ${votingTopics}">
-			--> 
-				<!--<li th:text="${votingTopic.title}"/> --> 
-				<!-- + ' ' + ${votingTopic.description} + ' Votes for: ' + ${votingTopic.votesFor} + ' Votes against: ' + ${votingTopic.votesAgainst} + " /> -->
-				<!--
-				<button type="button">VOTE FOR!</button> <button type="button">VOTE AGAINST!</button>	
-			</ul>
-			-->
-			
-			<!-- cool front end has to go, first do functionality, then do cool stuff !
-			<div style="width:50%; border: 1px solid black; background-image: 'none'; background-color: black;">
-				<p class="bg-primary" align="center">Do you prefer Cats or Dogs?</p>
-				<div class="progress" style="margin:10px;">
-				  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:40%;">
-				    Option 1!
-				  </div>
-				  <div class="progress-bar progress-bar-striped active progress-bar-info" role="progressbar" style="width:60%;">
-				    Option 2!
-				  </div>
-				</div>
-				
-				<div class="row">
-				      <div align="center" class="col-xs-6"><button type="button" class="btn btn-success">VOTE FOR!</button></div>
-				      <div align="center" class="col-xs-6"><button type="button" class="btn btn-primary">VOTE AGAINST!</button></div>
-				</div>
-			
-			</div>
-			
-			<div class="progress">
-			  <div class="progress-bar" role="progressbar" aria-valuenow="70"
-			  aria-valuemin="0" aria-valuemax="100" style="width:70%">
-			    70%
-			  </div>
-			</div>
-			
-			-->
-
-	        <div id="navbar">
-		        <table style="width:80%; background-color: grey; padding-left:10px; margin:20px; border: 2px solid black;">
-		        <tr>
-		        <td>
-		        <a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
-		        <a th:href="@{/testarea}"><input type="button" value="Run a test" class="btn btn-warning"/></a>
-		        </td>
-		        </tr>
-		        </table>
-		    </div>		  
+ 			<br/>
+ 			<div sec:authorize="hasRole('ROLE_ADMIN')">
+ 				<p>Admin tools:</p>		
+ 				<a href="/admin/deletethisquestion"><button class="btn btn-warning">DELETE THIS QUESTION</button></a>
+        		<a href="/"><button class="btn btn-warning">Back to main menu</button></a>
+        	</div>
+        	<br/>
+        
         </div>    
-
-	              
+        
+         
+  
     </body>
 </html>
