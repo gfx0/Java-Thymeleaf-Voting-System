@@ -12,7 +12,9 @@ public class VotingTopic {
 	private String choice1;
 	private String choice2;
 	private String choiceMade;
-
+	private int votesFor;
+	private int votesAgainst;
+	
 	public String getChoiceMade() {
 		return choiceMade;
 	}
@@ -33,14 +35,10 @@ public class VotingTopic {
 		return choice2;
 	}
 
-
 	public void setChoice2(String choice2) {
 		this.choice2 = choice2;
 	}
 
-	private int votesFor;
-	private int votesAgainst;
-	
 	public VotingTopic()
 	{
 		super();
