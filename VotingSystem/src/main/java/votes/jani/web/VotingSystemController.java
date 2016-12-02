@@ -140,6 +140,30 @@ public class VotingSystemController {
     	if ( usersVoteResult== null )
     		return "allvotesdone";
     		
+    	int votesForTest = 25;
+    	int votesAgainstTest = 75;
+    	int totalVotes = (votesForTest + votesAgainstTest); //Plus one is the control value, this makes sure that the divider is never zero.
+    	int votesForPercentage = (int) ( ((float)votesForTest / (float)totalVotes) * 100.0f );
+    	int votesAgainstPercentage = (int) ( ((float)votesAgainstTest / (float)totalVotes) * 100.0f );
+    	
+    	System.out.println("totalVotes: "+totalVotes);
+    	System.out.println("votesForTest: "+votesForTest);
+    	System.out.println("votesAgainstTest: "+votesAgainstTest);
+    	
+    	System.out.println("votesForPercentage: "+votesForPercentage);
+    	System.out.println("votesAgainstPercentage: "+votesAgainstPercentage);
+    	
+    	model.addAttribute("votesForPercentage",  votesForPercentage);
+    	model.addAttribute("votesAgainstPercentage",  votesAgainstPercentage);
+
+    	//Test vote
+    	if ( mVotingTopics != null && mVotingTopics.size() > 0 )
+    		model.addAttribute("voteTitle", mVotingTopics.get(0).getTitle());
+    	else
+    		model.addAttribute("voteTitle", "Dummy title, votingtopics not initialized..");
+    	model.addAttribute("votesFor", 25);
+    	model.addAttribute("votesAgainst", 75);
+    	
     	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
 
     	/************************************************************

@@ -4,33 +4,66 @@
         <title>Voting System Welcome Page</title>	
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     </head>
     <body>    
 		<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
 	        <h1>Voting System 1.0 Vote:</h1>
 	     
+	     	<div class="panel panel-primary">
+	     		<div class="panel-heading">
+					Choose One Option To Vote
+				</div>
 			<form action="#" th:action="@{/submitvote}" method="post">
-					<h2>Choose One Option To Vote</h2>
+
+					<div class="panel-body">
+					
 					<p th:text="${votingTopicX.title}"></p>
 						<div align="left">
-			         	<input type="radio" th:name="${votingTopicX.title}" th:text="${votingTopicX.choice1}" th:field="${votingTopicX.choiceMade}" value="0"></input>
+			         	<input type="radio" onclick="enableVoteButton()" th:name="votingTopicChoice" th:text="${votingTopicX.choice1}" th:field="${votingTopicX.choiceMade}" value="0"></input>
 			         	&nbsp;&nbsp;
-			         	<input type="radio" th:name="${votingTopicX.title}" th:text="${votingTopicX.choice2}" th:field="${votingTopicX.choiceMade}" value="1"></input>
+			         	<input type="radio" onclick="enableVoteButton()" th:name="votingTopicChoice" th:text="${votingTopicX.choice2}" th:field="${votingTopicX.choiceMade}" value="1"></input>
 			         	</div>		                             
 					<br/>
-					<button type="submit" value="Save Data Button" class="btn btn-info">Save My Vote</button> 
+					</div>
+					<div class="panel-footer">
+					<button id="votingButton" type="submit" value="Save Data Button" class="btn btn-success">Save My Vote</button>
+					<a href="/"><button type="button" class="btn btn-danger">Back to main menu</button></a>
+					</div>
 			</form>
+			</div>
  			<br/>
  			<div sec:authorize="hasRole('ROLE_ADMIN')">
  				<p>Admin tools:</p>		
  				<a href="/admin/deletethisquestion"><button class="btn btn-warning">DELETE THIS QUESTION</button></a>
-        		<a href="/"><button class="btn btn-warning">Back to main menu</button></a>
         	</div>
         	<br/>
         
         </div>    
         
-         
+        <script>
+        
+        /*******************************************************
+         *
+         * Hide the voting button unless user chooses an option.
+         *
+         *******************************************************/
+		$( document ).ready(function() {
+		  
+		  //document.getElementById("votingButton").style.display = "disabled";
+		  document.getElementById("votingButton").disabled = true;
+		  document.getElementById("votingButton").innerHTML = "Please Choose An Option";
+		  
+		});
+        
+        function enableVoteButton()
+        {
+        	console.log("doing it!")
+        	document.getElementById("votingButton").style.display = "initial";
+        	document.getElementById("votingButton").disabled = false;
+		  	document.getElementById("votingButton").innerHTML = "Save My Vote";
+        }
+		</script>
   
     </body>
 </html>
