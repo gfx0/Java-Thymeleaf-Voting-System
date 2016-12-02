@@ -18,7 +18,13 @@
 				</div>
    		    	<div class="panel-body">
    		    	
-			   		results here...
+			   		<ul>
+						<div th:each="votingTopic,iterStat : ${votingTopics}">    
+						        <li>
+						            <span th:text="${votingTopic.title}" />
+						        </li>    
+						</div>
+					</ul>
 					
 				</div>
 			</div>

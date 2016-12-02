@@ -43,9 +43,9 @@ public class VotingSystemController {
 		mVotingTopics = new ArrayList<VotingTopic>();
 		VotingTopic topic1 = new VotingTopic("Do you prefer Cats or Dogs?", "Cats", "Dogs", 2, 6);	
 		VotingTopic topic2 = new VotingTopic("Do you like Apples or Oranges?", "Apples", "Oranges", 4, 6);
-		VotingTopic topic3 = new VotingTopic("Do you like the Moon or the Sun?", "Moon", "Sun", 3, 3);
-		VotingTopic topic4 = new VotingTopic("Is Chocolate Good?", "Yes", "No", 3, 3);
-		VotingTopic topic5 = new VotingTopic("Would you like to visit Australia?", "Yes", "No", 3, 3);
+		VotingTopic topic3 = new VotingTopic("Do you like the Moon or the Sun?", "Moon", "Sun", 3, 7);
+		VotingTopic topic4 = new VotingTopic("Is Chocolate Good?", "Yes", "No", 0, 1);
+		VotingTopic topic5 = new VotingTopic("Would you like to visit Australia?", "Yes", "No", 90, 44);
 		mVotingTopics.add(topic1);
 		mVotingTopics.add(topic2);
 		mVotingTopics.add(topic3);
@@ -137,11 +137,43 @@ public class VotingSystemController {
     		//votingTopics.toString();
     	}
     	
+    	if ( mVotingTopics == null )
+    		return "index";
+
     	if ( usersVoteResult== null )
     		return "allvotesdone";
     		
-    	int votesForTest = 25;
-    	int votesAgainstTest = 75;
+
+		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
+		if ( mCurrentVotingIndex >= mVotingTopics.size() )
+		{
+			return "allvotesdone";
+		}
+		
+    	/************************************************************
+    	 * 
+    	 * Handle the users choice, 0 is yes, 1 is no, usually, 
+    	 * but voting topics can have custom choice names.
+    	 * 
+    	 ************************************************************/
+    	//Handle users choice 
+    	boolean successfulVote = false; 
+
+
+    	if ( usersVoteResult.getChoiceMade().equals("0") )
+    	{
+    		successfulVote = true;
+    		mVotingTopics.get(mCurrentVotingIndex).setVotesFor(mVotingTopics.get(mCurrentVotingIndex).getVotesFor() + 1);
+    	} else if ( usersVoteResult.getChoiceMade().equals("1") )
+    	{
+    		successfulVote = true;
+    		mVotingTopics.get(mCurrentVotingIndex).setVotesAgainst(mVotingTopics.get(mCurrentVotingIndex).getVotesAgainst() + 1);
+    	} else {
+    		return "error";
+    	}
+
+    	int votesForTest =  mVotingTopics.get(mCurrentVotingIndex).getVotesFor();
+    	int votesAgainstTest = mVotingTopics.get(mCurrentVotingIndex).getVotesAgainst();
     	int totalVotes = (votesForTest + votesAgainstTest); //Plus one is the control value, this makes sure that the divider is never zero.
     	int votesForPercentage = (int) ( ((float)votesForTest / (float)totalVotes) * 100.0f );
     	int votesAgainstPercentage = (int) ( ((float)votesAgainstTest / (float)totalVotes) * 100.0f );
@@ -156,60 +188,24 @@ public class VotingSystemController {
     	model.addAttribute("votesForPercentage",  votesForPercentage);
     	model.addAttribute("votesAgainstPercentage",  votesAgainstPercentage);
 
-    	//Test vote
-    	if ( mVotingTopics != null && mVotingTopics.size() > 0 )
-    		model.addAttribute("voteTitle", mVotingTopics.get(0).getTitle());
-    	else
-    		model.addAttribute("voteTitle", "Dummy title, votingtopics not initialized..");
-    	model.addAttribute("votesFor", 25);
-    	model.addAttribute("votesAgainst", 75);
+   		model.addAttribute("voteTitle",  mVotingTopics.get(mCurrentVotingIndex).getTitle());
+    	model.addAttribute("choiceName1", mVotingTopics.get(mCurrentVotingIndex).getChoice1());
+    	model.addAttribute("choiceName2", mVotingTopics.get(mCurrentVotingIndex).getChoice2());
+    	model.addAttribute("votesForNum", votesForTest);
+    	model.addAttribute("votesAgainstNum", votesAgainstTest);
     	
-    	model.addAttribute("usersVotingTopicAndResult", usersVoteResult);
+		//Prepare for the next vote.
+		mCurrentVotingIndex++;
 
-    	/************************************************************
-    	 * 
-    	 * Handle the users choice, 0 is yes, 1 is no, usually, 
-    	 * but voting topics can have custom choice names.
-    	 * 
-    	 ************************************************************/
-    	//Handle users choice 
-    	boolean successfulVote = false; 
-
-		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
-		if ( mCurrentVotingIndex >= mVotingTopics.size() )
-		{
-			return "allvotesdone";
-		}
-
-    	if ( usersVoteResult.getChoiceMade().equals("0") )
-    	{
-    		successfulVote = true;
-    		mVotingTopics.get(mCurrentVotingIndex).setVotesFor(mVotingTopics.get(mCurrentVotingIndex).getVotesFor() + 1);
-    	} else if ( usersVoteResult.getChoiceMade().equals("1") )
-    	{
-    		successfulVote = true;
-    		mVotingTopics.get(mCurrentVotingIndex).setVotesAgainst(mVotingTopics.get(mCurrentVotingIndex).getVotesAgainst() + 1);
-    	}
-    	
-    	if ( successfulVote )
-    	{
-    		//Go to the next vote
-    		mCurrentVotingIndex++;
-    		
-    		//Did we reach the end of voting?
-    		if ( mCurrentVotingIndex >= mVotingTopics.size() )
-    		{
-    			return "allvotesdone";
-    		} 
-
-    	}
-    	
     	//End of voting was not reached, go vote again.
     	return "voteresults";
     }
        
     @RequestMapping(value = "allvotesdone")
     public String allVotesDone(Model model){
+    	
+    	
+    	
         return "allvotesdone";
     }
     
@@ -268,7 +264,7 @@ public class VotingSystemController {
 		{
 			return "allvotesdone";
 		}
-    	
+
     	if ( mCurrentVotingIndex < mVotingTopics.size() )
     		model.addAttribute("votingTopicX", mVotingTopics.get(mCurrentVotingIndex));
     	else
@@ -313,6 +309,7 @@ public class VotingSystemController {
 
     	return "login";
     }
+
     /*
     @RequestMapping(value="/logout", method = RequestMethod.GET)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {

@@ -21,11 +21,11 @@
 					<div style="width:80%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
 						<p class="bg-primary" align="center" th:text="${voteTitle}"></p>
 						<div class="progress" style="margin:10px;">
-						  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"  th:style="'width:'+ ${votesFor}+'%;'">
-						    Votes(<span th:text="${votesFor}" />) <span th:text="''+${votesForPercentage}+'%'" />
+						  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"  th:style="'width:'+ ${votesForPercentage}+'%;'">
+						    <span th:text="${choiceName1}" />(<span th:text="${votesForNum}" />) <span th:text="''+${votesForPercentage}+'%'" />
 						  </div>
-						  <div class="progress-bar progress-bar-striped active progress-bar-danger" role="progressbar"  th:style="'width:'+ ${votesAgainst}+'%;'">
-						    Votes(<span th:text="${votesAgainst}" />) <span th:text="''+${votesAgainstPercentage}+'%'" />
+						  <div class="progress-bar progress-bar-striped active progress-bar-danger" role="progressbar"  th:style="'width:'+ ${votesAgainstPercentage}+'%;'">
+						    <span th:text="${choiceName2}" />(<span th:text="${votesAgainstNum}" />) <span th:text="''+${votesAgainstPercentage}+'%'" />
 						  </div>
 						</div>
 					</div>
@@ -48,14 +48,6 @@
         </div>    
         
         <br/> 		    
-        <!--
-	    <div th:switch="${usersVotingTopicAndResult.choiceMade}"> 
-		  <p th:case="'0'">You voted yes!</p>
-		  <p th:case="'1'">You voted no!</p>
-		  <p th:case="*">Your voting result was unclear.. Sorry.</p> 
-		</div>
-		-->
-
 	              
     </body>
 </html>
