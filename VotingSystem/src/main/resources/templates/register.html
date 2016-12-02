@@ -6,9 +6,9 @@
 	<link type="text/css" rel="stylesheet" th:href="@{css/bootstrap.min.css}" />
 </head>
 <body>
-	<h1>Register a new account</h1>
-		
-     <div class="col-md-4">
+   	<div class="panel panel-primary" id="content" style="margin: 30px; padding-left: 20px; padding-right: 20px;">
+	<h1>Voting System 1.0 Register New Account</h1>
+
 		<form th:object="${register}" th:action="@{/adduser}" action="#" method="post">
 			<div>
 				<label> Username :<input type="text" th:field="*{username}" class="form-control"/></label>
@@ -29,13 +29,16 @@
 			
 			<input type="submit" class="btn btn-success" value="Create your account!"></input>		
 		</form>
-	</div>
 	
-    <div class="col-md-1" id="navbar">
+	<br />
+
     	<div>
 	    <a th:href="@{/}"><input type="button" value="Back to main menu" class="btn btn-primary"/></a>
 	    <a th:href="@{/login}"><input type="button" value="Already have an account? Log in here!" class="btn btn-success"/></a>
 	    </div>
+	    
+	<br />
+	
 	</div>
 </body>
 </html>

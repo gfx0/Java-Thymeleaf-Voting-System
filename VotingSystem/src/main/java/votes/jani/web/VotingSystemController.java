@@ -117,7 +117,7 @@ public class VotingSystemController {
     	{
     		System.out.println("Yeehaw!");
     		mCurrentVotingIndex++;
-    		if ( mCurrentVotingIndex > mVotingTopics.size() )
+    		if ( mCurrentVotingIndex >= mVotingTopics.size() )
     		{
     			System.out.println("Yeehaw! 2");
     			return "allvotesdone";
