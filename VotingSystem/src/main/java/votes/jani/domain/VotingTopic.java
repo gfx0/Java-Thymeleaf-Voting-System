@@ -2,10 +2,12 @@ package votes.jani.domain;
 
 public class VotingTopic {
 
+
 	@Override
 	public String toString() {
 		return "VotingTopic [title=" + title + ", choice1=" + choice1 + ", choice2=" + choice2 + ", choiceMade="
-				+ choiceMade + ", votesFor=" + votesFor + ", votesAgainst=" + votesAgainst + "]";
+				+ choiceMade + ", votesFor=" + votesFor + ", votesAgainst=" + votesAgainst + ", votesForPercentage="
+				+ votesForPercentage + ", votesAgainstPercentage=" + votesAgainstPercentage + "]";
 	}
 
 	private String title;
@@ -14,7 +16,25 @@ public class VotingTopic {
 	private String choiceMade;
 	private int votesFor;
 	private int votesAgainst;
+	private int votesForPercentage;
+	private int votesAgainstPercentage;
 	
+	public int getVotesForPercentage() {
+		return votesForPercentage;
+	}
+
+	public void setVotesForPercentage(int votesForPercentage) {
+		this.votesForPercentage = votesForPercentage;
+	}
+
+	public int getVotesAgainstPercentage() {
+		return votesAgainstPercentage;
+	}
+
+	public void setVotesAgainstPercentage(int votesAgainstPercentage) {
+		this.votesAgainstPercentage = votesAgainstPercentage;
+	}
+
 	public String getChoiceMade() {
 		return choiceMade;
 	}
@@ -48,6 +68,8 @@ public class VotingTopic {
 		votesFor = 99;
 		votesAgainst = 99;
 		choiceMade = "99";
+		votesForPercentage = 1;
+		votesAgainstPercentage = 1;
 	}
 
 
@@ -67,6 +89,8 @@ public class VotingTopic {
 		this.votesFor 		= votesFor;
 		this.votesAgainst 	= votesAgainst;
 		this.choiceMade		= "99";
+		this.votesForPercentage = 1;
+		this.votesAgainstPercentage = 1;
 	}
 
 	public int getVotesFor() {
