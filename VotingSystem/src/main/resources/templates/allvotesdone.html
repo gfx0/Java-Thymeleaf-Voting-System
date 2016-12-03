@@ -16,15 +16,20 @@
 	     		<div class="panel-heading">
 					Congratulations! You have voted on all questions! Here are the results:
 				</div>
-   		    	<div class="panel-body">
-   		    	
-			   		<ul>
-						<div th:each="votingTopic,iterStat : ${votingTopics}">    
-						        <li>
-						            <span th:text="${votingTopic.title}" />
-						        </li>    
+   		    	<div align="center" class="panel-body">
+			   		<div th:each="votingTopic : ${votingTopics}">    
+						<div style="width:80%; border: 1px solid black; background-image: 'none'; background-color: lightgrey;">
+						<p class="bg-primary" align="center" th:text="${votingTopic.title}"></p>
+						<div class="progress" style="margin:10px;">
+						  <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"  th:style="'width:'+ ${votingTopic.votesForPercentage}+'%;'">
+						    <span th:text="${votingTopic.choice1}" />(<span th:text="${votingTopic.votesFor}" />) <span th:text="''+${votingTopic.votesForPercentage}+'%'" />
+						  </div>
+						  <div class="progress-bar progress-bar-striped active progress-bar-danger" role="progressbar"  th:style="'width:'+ ${votingTopic.votesAgainstPercentage}+'%;'">
+						    <span th:text="${votingTopic.choice2}" />(<span th:text="${votingTopic.votesAgainst}" />) <span th:text="''+${votingTopic.votesAgainstPercentage}+'%'" />
+						  </div>
 						</div>
-					</ul>
+					</div>   
+					</div>
 					
 				</div>
 			</div>

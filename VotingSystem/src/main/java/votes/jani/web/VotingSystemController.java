@@ -141,7 +141,10 @@ public class VotingSystemController {
     		return "index";
 
     	if ( usersVoteResult== null )
+    	{
+    		System.out.println("userVoteResult was null!");
     		return "allvotesdone";
+    	}
     		
 
 		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
@@ -178,6 +181,9 @@ public class VotingSystemController {
     	int votesForPercentage = (int) ( ((float)votesForTest / (float)totalVotes) * 100.0f );
     	int votesAgainstPercentage = (int) ( ((float)votesAgainstTest / (float)totalVotes) * 100.0f );
     	
+    	mVotingTopics.get(mCurrentVotingIndex).setVotesForPercentage(votesForPercentage);
+    	mVotingTopics.get(mCurrentVotingIndex).setVotesAgainstPercentage(votesAgainstPercentage);
+    	
     	System.out.println("totalVotes: "+totalVotes);
     	System.out.println("votesForTest: "+votesForTest);
     	System.out.println("votesAgainstTest: "+votesAgainstTest);
@@ -202,9 +208,14 @@ public class VotingSystemController {
     }
        
     @RequestMapping(value = "allvotesdone")
-    public String allVotesDone(Model model){
-    	
-    	
+    public String allVotesDone(@ModelAttribute VotingTopic votingTopic, Model model){
+
+    	/************************************************************
+    	 * 
+    	 * Thymeleaf code digs up the results to present from this.
+    	 * 
+    	 ************************************************************/
+    	model.addAttribute("votingTopics", mVotingTopics);
     	
         return "allvotesdone";
     }
@@ -262,7 +273,8 @@ public class VotingSystemController {
 		//Make sure we're not at the end of voting, if we are, return to the allvotesdone part.
 		if ( mCurrentVotingIndex >= mVotingTopics.size() )
 		{
-			return "allvotesdone";
+			//NOTE: A full redirect is necessary here!
+			return "redirect:/allvotesdone";
 		}
 
     	if ( mCurrentVotingIndex < mVotingTopics.size() )
