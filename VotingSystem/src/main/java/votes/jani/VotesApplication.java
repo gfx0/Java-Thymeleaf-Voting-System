@@ -3,13 +3,22 @@ package votes.jani;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
+import votes.jani.domain.User;
+import votes.jani.domain.UserRepository;
 
 @SpringBootApplication
 public class VotesApplication {
 
+	@Autowired
+	private UserRepository urepository;
+	
 	/***************
 	 * 
 	 * Note: Features required for this project work:
@@ -36,5 +45,16 @@ public class VotesApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(VotesApplication.class, args);
+		
+		
 	}
+	@Bean
+	public CommandLineRunner demo(){
+		return(args) -> {
+			//NOTE: It's critical to keep the name as "testrunneruser" since thats what the findByUserName test reflects to!
+			User testRunnerDefaultUser = new User("testrunneruser", "testuserfortestrunner", "USER");
+			urepository.save(testRunnerDefaultUser);
+		};
+	}
+
 }
