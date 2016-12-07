@@ -21,9 +21,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-        .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css even if the user is logged out, we want to look cool :)
+        .csrf().disable() 					//For H2
+        .headers().frameOptions().disable()	//For H2
         .and()
-        .authorizeRequests().antMatchers("/register", "/test", "/adduser", "/").permitAll()
+        .authorizeRequests().antMatchers("/css/**", "/imgs/**").permitAll() // Enable css even if the user is logged out, we want to look cool :)
+        .and()
+        .authorizeRequests().antMatchers("/console", "/register", "/h2-console", "/h2-console/**", "/adduser", "/").permitAll()
         .and()
     	.authorizeRequests().antMatchers("/testarea").permitAll() // Enable testing area for developing this program
     	.and()
@@ -41,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       	  .logoutUrl("/logout")
       	  .logoutSuccessUrl("/login")
           .permitAll();
+          
     }
     
     @Autowired
