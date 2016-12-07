@@ -2,4 +2,4 @@
 
 This place contains some of my Java code.
 
-The VotingSystem folder has a spring io / thymeleaf backend with user login / admin login paired with a bootstrap front end.
+The VotingSystem is a spring/security/mongodb/h2db backend with user/admin login combined with a thymeleaf & bootstrap front end.
